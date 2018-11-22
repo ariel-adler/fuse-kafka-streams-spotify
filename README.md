@@ -2,6 +2,6 @@
 
 Create kafka environment:
 
-docker-compose up -d
+`docker-compose up -d`
 
 
