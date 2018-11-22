@@ -1,6 +1,6 @@
 # fuse-kafka-streams-spotify
 
-Create kafka environment:
+__Create kafka environment:
 docker-compose up -d
 
 
