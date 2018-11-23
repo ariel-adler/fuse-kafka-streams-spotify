@@ -32,10 +32,10 @@ import java.util.concurrent.CountDownLatch;
  * the code split each text line in string into words and then write back into a sink topic "streams-linesplit-output" where
  * each record represents a single word.
  */
-public class SongsFilter {
+public class SongsStreamFilter {
 
     public static void main(String[] args) throws Exception {
-	    SongsFilter songsFilter = new SongsFilter();
+	    SongsStreamFilter songsFilter = new SongsStreamFilter();
     	songsFilter.split();
     }
 
