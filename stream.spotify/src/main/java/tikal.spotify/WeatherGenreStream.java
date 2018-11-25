@@ -31,6 +31,7 @@ import tikal.spotify.serdes.UserWeatherSerdes;
 
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * In this example, we implement a simple LineSplit program using the high-level Streams DSL
@@ -68,14 +69,14 @@ public class WeatherGenreStream {
 		KStream<String, Recommendation> stream = right.join(left,
 				(userWeather, userGenre) ->
 						Recommendation.builder().email(userWeather.getEmail()).trackId(userGenre.getTrackId()).build(),
-				JoinWindows.of(5000),
+				JoinWindows.of(TimeUnit.MINUTES.toMillis(5)),
 				Joined.with(
 						Serdes.String(),
 						UserWeatherSerdes.getSerdes(),
 						UserGenreSerdes.getSerdes()
 				)
 		);
-		stream.to(USER_WEATHER_TOPIC, Produced.with(
+		stream.to("recommendations", Produced.with(
 				Serdes.String(), RecommendationSerdes.getSerdes()
 
 		));
