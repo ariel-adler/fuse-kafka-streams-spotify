@@ -2,12 +2,12 @@ package tikal.spotify.serdes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Deserializer;
-import tikal.spotify.domain.UserLocation;
+import tikal.spotify.domain.LocationWeather;
 
 import java.io.IOException;
 import java.util.Map;
 
-public class UserLocationDeserializer implements Deserializer<UserLocation> {
+public class LocationWeatherDeserializer implements Deserializer<LocationWeather> {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
@@ -16,9 +16,9 @@ public class UserLocationDeserializer implements Deserializer<UserLocation> {
     }
 
     @Override
-    public UserLocation deserialize(String topic, byte[] bytes) {
+    public LocationWeather deserialize(String topic, byte[] bytes) {
         try {
-            return mapper.readValue(bytes, UserLocation.class);
+            return mapper.readValue(bytes, LocationWeather.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

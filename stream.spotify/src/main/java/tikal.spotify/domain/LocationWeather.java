@@ -3,8 +3,8 @@ package tikal.spotify.domain;
 import lombok.Data;
 
 @Data
-public class UserLocation {
-    private String email;
+public class LocationWeather {
+    private String weatherType;
     private String country;
     private String city;
 }
