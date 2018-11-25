@@ -57,7 +57,8 @@ public class UserWeatherStream {
                 )
         );
 
-        join.to(OUT_TOPIC_NAME, Produced.with(
+        join.selectKey((key, value) -> value.getEmail())
+                .to(OUT_TOPIC_NAME, Produced.with(
                 Serdes.String(),
                 UserWeatherSerdes.getSerdes()
         ));
