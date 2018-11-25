@@ -24,6 +24,7 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.JoinWindows;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
+import tikal.spotify.domain.Recommendation;
 import tikal.spotify.domain.UserGenre;
 import tikal.spotify.domain.UserWeather;
 import tikal.spotify.serdes.UserGenreSerdes;
@@ -59,7 +60,8 @@ public class WeatherGenreStream {
 
 		KStream<String, UserWeather> right = builder.stream(USER_WEATHER_TOPIC);
 		KStream<String, UserGenre> left = builder.stream(USER_GENRES_TOPIC);
-		KStream<String, String> stream = right.join(left, (userWeather, userGenre) -> "",
+		KStream<String, Recommendation> stream = right.join(left,
+				(userWeather, userGenre) -> Recommendation.builder().email(userWeather.getEmail()).trackId(userGenre.getTrackId()).build(),
 				JoinWindows.of(5000),
 				Joined.with(
 						Serdes.String(),

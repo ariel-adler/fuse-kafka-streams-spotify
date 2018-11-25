@@ -8,5 +8,5 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserGenre {
 	String email;
-	String genre;
+	String trackId;
 }
