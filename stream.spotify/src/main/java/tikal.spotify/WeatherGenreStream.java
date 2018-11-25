@@ -21,12 +21,11 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.JoinWindows;
-import org.apache.kafka.streams.kstream.Joined;
-import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.*;
 import tikal.spotify.domain.Recommendation;
 import tikal.spotify.domain.UserGenre;
 import tikal.spotify.domain.UserWeather;
+import tikal.spotify.serdes.RecommendationSerdes;
 import tikal.spotify.serdes.UserGenreSerdes;
 import tikal.spotify.serdes.UserWeatherSerdes;
 
@@ -58,10 +57,17 @@ public class WeatherGenreStream {
 
 		final StreamsBuilder builder = new StreamsBuilder();
 
-		KStream<String, UserWeather> right = builder.stream(USER_WEATHER_TOPIC);
-		KStream<String, UserGenre> left = builder.stream(USER_GENRES_TOPIC);
+		KStream<String, UserWeather> right = builder.stream(USER_WEATHER_TOPIC, Consumed.with(
+				Serdes.String(),
+				UserWeatherSerdes.getSerdes()
+		));
+		KStream<String, UserGenre> left = builder.stream(USER_GENRES_TOPIC, Consumed.with(
+				Serdes.String(),
+				UserGenreSerdes.getSerdes()
+		));
 		KStream<String, Recommendation> stream = right.join(left,
-				(userWeather, userGenre) -> Recommendation.builder().email(userWeather.getEmail()).trackId(userGenre.getTrackId()).build(),
+				(userWeather, userGenre) ->
+						Recommendation.builder().email(userWeather.getEmail()).trackId(userGenre.getTrackId()).build(),
 				JoinWindows.of(5000),
 				Joined.with(
 						Serdes.String(),
@@ -69,7 +75,10 @@ public class WeatherGenreStream {
 						UserGenreSerdes.getSerdes()
 				)
 		);
-		stream.to(USER_WEATHER_TOPIC);
+		stream.to(USER_WEATHER_TOPIC, Produced.with(
+				Serdes.String(), RecommendationSerdes.getSerdes()
+
+		));
 
 		final Topology topology = builder.build();
 		final KafkaStreams streams = new KafkaStreams(topology, props);
