@@ -20,7 +20,4 @@ class UserController @Autowired constructor(val kafTemplate: KafkaTemplate<Strin
         val success = !fut.completable().isCompletedExceptionally
         return if (success) HttpStatus.CREATED else HttpStatus.BAD_REQUEST
     }
-
-    @GetMapping
-    fun getUsers(): User = User("email@mail.com", "my name", 33, arrayOf(Genre.BLUES, Genre.METAL))
 }
