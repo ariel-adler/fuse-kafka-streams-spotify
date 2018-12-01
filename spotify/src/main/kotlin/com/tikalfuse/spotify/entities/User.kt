@@ -1,6 +1,11 @@
 package com.tikalfuse.spotify.entities
 
-data class User constructor(val email: String, val name: String, val age:Int, var genres: Array<String>) {
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class User (@JsonProperty("email") val email: String,
+                 @JsonProperty("name") val name: String,
+                 @JsonProperty("age") val age:Int,
+                 @JsonProperty("genres") var genres: Array<Genre>) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

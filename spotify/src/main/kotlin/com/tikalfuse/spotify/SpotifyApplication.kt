@@ -8,4 +8,5 @@ class SpotifyApplication
 
 fun main(args: Array<String>) {
     runApplication<SpotifyApplication>(*args)
+    return
 }
